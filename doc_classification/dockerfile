@@ -1,0 +1,15 @@
+FROM python:3
+
+ADD main.py /
+
+RUN pip install nltk
+RUN pip install simplejson
+RUN pip install flask
+RUN pip install textblob
+
+EXPOSE 5000:5000
+CMD [ "python", "./main.py"  ]
+ 
+
+
+ 

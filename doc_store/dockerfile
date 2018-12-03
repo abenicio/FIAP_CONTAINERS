@@ -1,0 +1,16 @@
+FROM ubuntu:18.04
+RUN apt-get   update  -y && \
+    apt-get install -y wget git gcc &&\
+    apt-get   upgrade  -y 
+RUN wget -P /tmp https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf /tmp/go1.9.2.linux-amd64.tar.gz
+RUN rm /tmp/go1.9.2.linux-amd64.tar.gz
+
+ENV GOPATH /go
+ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+WORKDIR $GOPATH
+WORKDIR /doc_store/
+COPY . .
+CMD ["/doc_store/main"]
+EXPOSE 8010:8010

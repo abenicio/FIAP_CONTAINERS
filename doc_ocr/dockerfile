@@ -1,0 +1,24 @@
+FROM ubuntu:18.04
+
+RUN mkdir /build
+RUN apt-get   update  -y && \
+    apt-get install -y wget git gcc &&\
+    apt-get   upgrade  -y && \
+    apt-get install libtesseract-dev  -y && \
+    apt-get install tesseract-ocr -y 
+RUN wget -P /tmp https://storage.googleapis.com/golang/go1.9.2.linux-amd64.tar.gz
+#RUN go get golang.org/x/net/html
+#RUN go get github.com/satori/go.uuid
+#RUN go get github.com/gorilla/mux
+RUN tar -C /usr/local -xzf /tmp/go1.9.2.linux-amd64.tar.gz
+RUN rm /tmp/go1.9.2.linux-amd64.tar.gz
+
+ENV GOPATH /go
+ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+WORKDIR $GOPATH
+WORKDIR /work/src/github.com/doc_ocr/
+COPY . .
+#COPY --from=0 /work/src/github.com/doc_ocr/main /usr/bin
+CMD ["/work/src/github.com/doc_ocr/main"]
+EXPOSE 8000:8000
